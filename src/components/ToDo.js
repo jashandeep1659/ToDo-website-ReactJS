@@ -1,21 +1,66 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import axiosInstance from "../api";
+import { isCompositeComponentWithType } from "react-dom/test-utils";
 const ToDo = () => {
-    const TaskRender = () => {
+    const [tasks, settasks] = useState([]);
+    useEffect(() => {
+        fetchTask();
+    }, []);
+
+    const fetchTask = () => {
+        axiosInstance.get("core/api/").then((res) => {
+            settasks(res.data);
+        });
+    };
+
+    const TaskRedner = () =>
+        tasks.map((item, index) => {
+            return <TaskComponent key={index} data={item} />;
+        });
+    const TaskComponent = ({ data }) => {
+        const CompleteTask = () => {
+            axiosInstance
+                .patch(`core/api/${data.id}/`, {
+                    completed: !data.completed,
+                })
+                .then((res) => {
+                    fetchTask();
+                });
+        };
+
+        const DeleteTask = () => {
+            axiosInstance.delete(`core/api/${data.id}/`).then((res) => {
+                fetchTask();
+            });
+        };
+
         return (
-            <div className="task">
-                <div className="checkbox">
-                    <input type="checkbox" />
+            <div
+                className={`task ${
+                    data.completed ? "bg-green-300" : "bg-white"
+                }   `}
+            >
+                <div className="checkbox" onClick={() => CompleteTask()}>
+                    <input
+                        type="checkbox"
+                        checked={data.completed}
+                        onChange={() => {
+                            CompleteTask();
+                        }}
+                    />
                 </div>
-                <div className="detail">
-                    <h6>Complete the website using the Django.</h6>
+                <div className="detail" onClick={() => CompleteTask()}>
+                    <h6>{data.name}</h6>
                     <div className="bottom">
-                        <p>
-                            <a href="#">Detail</a>
-                        </p>
-                        <p>Reminder: 19-10-22</p>
+                        <p>Reminder: {data.reminder}</p>
                     </div>
+                </div>
+                <div className="delete" onClick={() => DeleteTask()}>
+                    <button>
+                        <i className="bx bx-trash-alt"></i>
+                    </button>
                 </div>
             </div>
         );
@@ -27,10 +72,7 @@ const ToDo = () => {
                 <div className="logo">TODO</div>
                 <h2>Tasks</h2>
                 <div className="tasks">
-                    <TaskRender />
-                    <TaskRender />
-                    <TaskRender />
-                    <TaskRender />
+                    <TaskRedner />
                 </div>
                 <div className="text-center">
                     <Link

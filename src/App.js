@@ -1,20 +1,18 @@
-import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import React, { useContext, useEffect } from "react";
+import { BrowserRouter, Routes, Route, useFetcher } from "react-router-dom";
 import Navbar from "./components/Navbar";
-import Home from "./pages/Home";
 import "./App.scss";
-import AddNew from "./pages/AddNew";
-import Login from "./pages/Login";
+import UserState from "./context/userState";
+import ProtectedRoutes from "./ProtectedRoutes";
+
 const App = () => {
     return (
-        <BrowserRouter>
-            <Navbar />
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="add/" element={<AddNew />} />
-                <Route path="login/" element={<Login />} />
-            </Routes>
-        </BrowserRouter>
+        <UserState>
+            <BrowserRouter>
+                <Navbar />
+                <ProtectedRoutes />
+            </BrowserRouter>
+        </UserState>
     );
 };
 

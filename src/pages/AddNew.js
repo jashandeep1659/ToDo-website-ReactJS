@@ -1,9 +1,24 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axiosInstance from "../api";
 
 const AddNew = () => {
     const [taskTitle, settaskTitle] = useState("");
-    const [taskDetail, settaskDetail] = useState("");
+    const [taskDetail, settaskDetail] = useState("comeptel");
+    const [reminder, setreminder] = useState("");
+    const navigate = useNavigate();
+    const SubmitForm = () => {
+        axiosInstance
+            .post("core/api/", {
+                name: taskTitle,
+                detail: taskDetail,
+                reminder: reminder,
+            })
+            .then((res) => {
+                console.log(res);
+                return navigate("/");
+            });
+    };
 
     return (
         <section id="Add">
@@ -20,19 +35,27 @@ const AddNew = () => {
                     />
                     <textarea
                         placeholder="Task Detail"
+                        className="hidden"
                         value={taskDetail}
                         onChange={(e) => {
-                            settaskTitle(e.taskDetail.value);
+                            settaskDetail(e.taskDetail.value);
                         }}
                     ></textarea>
+                    <input
+                        type="date"
+                        value={reminder}
+                        onChange={(e) => {
+                            setreminder(e.target.value);
+                        }}
+                    />
                 </div>
                 <div className="text-center">
-                    <Link
-                        to="/add"
-                        className="bg-green-600 py-3 px-8 text-white font-bold block mt-10 "
+                    <button
+                        onClick={() => SubmitForm()}
+                        className="bg-green-600 py-3 px-8 text-white font-bold block mt-10 w-full"
                     >
                         Add New
-                    </Link>
+                    </button>
                 </div>
             </div>
         </section>

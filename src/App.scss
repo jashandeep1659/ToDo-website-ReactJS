@@ -51,7 +51,7 @@
             row-gap: 10px;
             margin-top: 10px;
             .task {
-                background-color: white;
+                // background-color: white;
                 padding: 5px 10px;
                 min-height: 50px;
                 display: flex;
@@ -96,6 +96,39 @@
 }
 
 #Add {
+    display: flex;
+    height: 90vh;
+    justify-content: center;
+    align-items: center;
+    .card {
+        background-color: whitesmoke;
+        padding: 30px 20px;
+        min-width: 33%;
+        .logo {
+            font-size: 2rem;
+            text-align: center;
+            font-weight: bolder;
+        }
+        .form {
+            display: flex;
+            flex-direction: column;
+            margin: 20px 0;
+            row-gap: 10px;
+            input {
+                display: block;
+                width: 100%;
+                padding: 10px 20px;
+                font-size: 1rem;
+            }
+            textarea {
+                padding: 10px 20px;
+                font-size: 1rem;
+            }
+        }
+    }
+}
+
+#Login {
     display: flex;
     height: 90vh;
     justify-content: center;
